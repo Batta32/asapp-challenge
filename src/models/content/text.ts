@@ -1,4 +1,4 @@
-import { ContentTypes, Content } from "./content";
+import { ContentTypes, Content } from './content';
 
 export class Text extends Content {
     public text: string;
@@ -13,11 +13,11 @@ export class Text extends Content {
     }
 
     public getQueryColumns(): string {
-        return "(messageId, text)";
+        return '(messageId, text)';
     }
 
     public getQueryValues(): string {
-        return "(?, ?)";
+        return '(?, ?)';
     }
 
     public getParameters(): any[] {

@@ -1,4 +1,4 @@
-import { ContentTypes, Content } from "./content";
+import { ContentTypes, Content } from './content';
 
 export class Image extends Content {
     public url: string;
@@ -17,11 +17,11 @@ export class Image extends Content {
     }
 
     public getQueryColumns(): string {
-        return "(messageId, url, height, width)";
+        return '(messageId, url, height, width)';
     }
 
     public getQueryValues(): string {
-        return "(?, ?, ?, ?)";
+        return '(?, ?, ?, ?)';
     }
 
     public getParameters(): any[] {

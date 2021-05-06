@@ -1,16 +1,11 @@
-import { checkState } from "../services/db";
+import { checkState } from '../services/db';
 
 export class Health {
-    // Constructor
-    public constructor() {
-
+    public static isAlive(): boolean {
+        return Health.validateDatabase();
     }
 
-    public isAlive(): boolean {
-        return this.validateDatabase();
-    }
-
-    private validateDatabase(): boolean {
+    private static validateDatabase(): boolean {
         return checkState();
     }
 }

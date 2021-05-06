@@ -1,4 +1,4 @@
-import { ContentTypes, Content } from "./content";
+import { ContentTypes, Content } from './content';
 
 export class Video extends Content {
     public url: string;
@@ -15,11 +15,11 @@ export class Video extends Content {
     }
 
     public getQueryColumns(): string {
-        return "(messageId, url, source)";
+        return '(messageId, url, source)';
     }
 
     public getQueryValues(): string {
-        return "(?, ?, ?)";
+        return '(?, ?, ?)';
     }
 
     public getParameters(): any[] {

@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { json, urlencoded } from "body-parser";
+import { json, urlencoded } from 'body-parser';
 import { AppRouting } from './server/app.routing';
 import * as dotenv from 'dotenv';
 
@@ -10,18 +10,18 @@ const port = process.env.PORT || 8080;
 const router: Router = express.Router();
 
 app.use((request, response, next) => {
-    if (request.url === "/") {
+    if (request.url === '/') {
         response.status(200);
     } else {
         next();
     }
 });
-app.use(json({ limit: "50mb" }));
-app.use(urlencoded({ limit: "50mb", extended: true }));
+app.use(json({ limit: '50mb' }));
+app.use(urlencoded({ limit: '50mb', extended: true }));
 
-app.use("/", router);
+app.use('/', router);
 new AppRouting(router);
 
 app.listen(port, () => {
-    console.log(`ASAPP Challenge app running on port ${port}`);
+    console.log(`ASAPP Challenge app running on port ${ port }`);
 });

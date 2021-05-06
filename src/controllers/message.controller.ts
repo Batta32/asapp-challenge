@@ -1,19 +1,19 @@
-import { Router, Request, Response } from "express";
-import { AppRoute } from "../models/app-route";
-import { Message } from "../models/message";
-import { Image, Text, Video } from "../models/content";
-import { Content } from "../models/content/content";
-import { User } from "../models/user";
-import { TokenValidation } from "../models/authentication/token";
+import { Router, Request, Response } from 'express';
+import { AppRoute } from '../models/app-route';
+import { Message } from '../models/message';
+import { Image, Text, Video } from '../models/content';
+import { Content } from '../models/content/content';
+import { User } from '../models/user';
+import { TokenValidation } from '../models/authentication/token';
 
 export class MessageController implements AppRoute {
-    public route = "/messages";
+    public route = '/messages';
     public router: Router = Router();
 
     // Constructor
     public constructor() {
-        this.router.post("/", TokenValidation, this.send);
-        this.router.get("/", TokenValidation, this.get);
+        this.router.post('/', TokenValidation, this.send);
+        this.router.get('/', TokenValidation, this.get);
     }
 
     /**
@@ -27,20 +27,20 @@ export class MessageController implements AppRoute {
             const type: string = request.body.content.type;
             let content: Content;
             switch (type.toLowerCase()) {
-                case "text": {
+                case 'text': {
                     content = new Text(request.body.content.text);
                     break;
                 }
-                case "image": {
+                case 'image': {
                     content = new Image(request.body.content.url, request.body.content.height, request.body.content.width);
                     break;
                 }
-                case "video": {
+                case 'video': {
                     content = new Video(request.body.content.url, request.body.content.source);
                     break;
                 }
                 default: {
-                    throw new Error("Non-supported type");
+                    throw new Error('Non-supported type');
                 }
             }
             const message: Message = new Message(senderId, recipientId, content);
@@ -59,7 +59,7 @@ export class MessageController implements AppRoute {
     /**
      * Fetch all existing messages to a given recipient, within a range of message IDs.
      */
-    public async get(request: Request, response: Response) {
+    public async get(request: Request, response: Response): Promise<void> {
         try {
             const recipientId: number = request.body.recipient;
             const startId: number = request.body.start;

@@ -1,4 +1,10 @@
-import { dbQuery } from "../../services/db";
+import { dbQuery } from '../../services/db';
+
+export enum ContentTypes {
+    TEXT,
+    IMAGE,
+    VIDEO
+}
 
 export abstract class Content {
     public abstract getParameters(): any[];
@@ -7,17 +13,8 @@ export abstract class Content {
     public abstract getQueryValues(): string;
     protected abstract createContent(rows: any[]): Content;
 
-    constructor() {
-    }
-
     public async getContent(messageId: number): Promise<Content> {
-        const rows: any[] = await dbQuery(`SELECT * FROM ${ContentTypes[this.getType()]} WHERE messageId = ?`, [messageId]) as any[];
+        const rows: any[] = await dbQuery(`SELECT * FROM ${ ContentTypes[this.getType()] } WHERE messageId = ?`, [messageId]) as any[];
         return this.createContent(rows);
     }
-}
-
-export enum ContentTypes {
-    TEXT,
-    IMAGE,
-    VIDEO
 }
