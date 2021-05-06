@@ -5,9 +5,21 @@ export class Video extends Content {
     public source: VideoTypes;
     
     constructor(url: string, source: VideoTypes) {
-        super(ContentTypes.VIDEO, "(messageId, url, source)", "(?, ?, ?)");
+        super();
         this.url = url;
         this.source = source;
+    }
+
+    public getType(): ContentTypes {
+        return ContentTypes.VIDEO;
+    }
+
+    public getQueryColumns(): string {
+        return "(messageId, url, source)";
+    }
+
+    public getQueryValues(): string {
+        return "(?, ?, ?)";
     }
 
     public getParameters(): any[] {

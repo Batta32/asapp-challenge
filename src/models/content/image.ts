@@ -6,10 +6,22 @@ export class Image extends Content {
     public width: number;
     
     constructor(url: string, height: number, width: number) {
-        super(ContentTypes.IMAGE, "(messageId, url, height, width)", "(?, ?, ?, ?)");
+        super();
         this.url = url;
         this.height = height;
         this.width = width;
+    }
+
+    public getType(): ContentTypes {
+        return ContentTypes.IMAGE;
+    }
+
+    public getQueryColumns(): string {
+        return "(messageId, url, height, width)";
+    }
+
+    public getQueryValues(): string {
+        return "(?, ?, ?, ?)";
     }
 
     public getParameters(): any[] {
