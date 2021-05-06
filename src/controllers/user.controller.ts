@@ -8,7 +8,7 @@ export class UserController implements AppRoute {
 
     // Constructor
     public constructor() {
-        this.router.get("/", this.createUser);
+        this.router.post("/", this.createUser);
     }
 
     /**

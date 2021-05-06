@@ -9,7 +9,7 @@ export class HealthController implements AppRoute {
 
     // Constructor
     public constructor() {
-        this.router.get("/", this.check);
+        this.router.post("/", this.check);
     }
 
     /**

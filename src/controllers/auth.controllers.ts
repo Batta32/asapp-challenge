@@ -8,7 +8,7 @@ export class AuthController implements AppRoute {
 
     // Constructor
     public constructor() {
-        this.router.get("/", this.login);
+        this.router.post("/", this.login);
     }
 
     /**
