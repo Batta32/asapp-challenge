@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { AppRoute } from "../models/app-route";
 import { User } from "../models/user";
+import * as jwt from 'jsonwebtoken';
 
 export class AuthController implements AppRoute {
     public route = "/login";
@@ -17,13 +18,22 @@ export class AuthController implements AppRoute {
      */
     public async login(request: Request, response: Response): Promise<void> {
         try {
-            const user: User = new User(request.body.username, request.body.password);
-            await user.login();
-            // TODO: User must login and a token must be generated
-            response.status(200).send(response.json({
-                id: user.id,
-                token: "tokenMocked"
-            }));
+            const user: User | undefined = await User.login(request.body.username);
+            if (user === undefined) response.status(400).json('Email or password is wrong')
+            else {
+                const correctPassword: boolean = await user.validatePassword(request.body.password);
+                if (!correctPassword) {
+                    response.status(400).json('Invalid password');
+                }
+                const token: string = jwt.sign({id: user.id}, process.env.TOKEN_SECRET || 'DEFAULT_TOKEN_SECRET', {
+                    // 1 hour
+                    expiresIn: 60 * 60 * 24
+                });
+                response.status(200).send(response.header('Authorization', token).json({
+                    id: user.id,
+                    token: token
+                }));
+            }
         } catch (err) {
             response.status(500).json({
                 err: err.message

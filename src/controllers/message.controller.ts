@@ -4,6 +4,7 @@ import { Message } from "../models/message";
 import { Image, Text, Video } from "../models/content";
 import { Content } from "../models/content/content";
 import { User } from "../models/user";
+import { TokenValidation } from "../models/authentication/token";
 
 export class MessageController implements AppRoute {
     public route = "/messages";
@@ -11,8 +12,8 @@ export class MessageController implements AppRoute {
 
     // Constructor
     public constructor() {
-        this.router.post("/", this.send);
-        this.router.get("/", this.get);
+        this.router.post("/", TokenValidation, this.send);
+        this.router.get("/", TokenValidation, this.get);
     }
 
     /**
