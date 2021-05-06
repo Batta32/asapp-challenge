@@ -17,6 +17,7 @@ export class UserController implements AppRoute {
     public async createUser(request: Request, response: Response): Promise<void> {
         try {
             const user: User = new User(request.body.username, request.body.password);
+            user.password = await user.encryptPassword(user.password);
             await user.create();
             response.status(200).send(response.json({
                 id: user.id
