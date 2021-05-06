@@ -1,16 +1,16 @@
 import { dbQuery } from "../services/db";
-import { Content } from "./content/content";
+import { Content, ContentTypes } from "./content/content";
 
 export class Message {
     public id: number = -1;
-    public senderId: number = -1;
-    public recipientId: number = -1;;
-    public timestamp: Date | undefined = undefined;
+    public sender: number = -1;
+    public recipient: number = -1;;
+    public timestamp: Date = new Date();
     public content: Content;
 
-    constructor(senderId: number, recipientId: number, content: Content) {
-        this.senderId = senderId;
-        this.recipientId = recipientId;
+    constructor(sender: number, recipient: number, content: Content) {
+        this.sender = sender;
+        this.recipient = recipient;
         this.content = content;
     }
 
@@ -20,16 +20,17 @@ export class Message {
 
     public async send(): Promise<void> {
         this.timestamp = new Date();
+        const milliseconds: number = this.timestamp.getTime();
         //TODO: Promise.all?
-        await dbQuery('INSERT INTO message (senderId, recipientId, timestamp, contentType) VALUES (?, ?, ?, ?)', [this.senderId, this.recipientId, this.timestamp, this.content.type]);
-        await this.getIdFromDatabase();
-        const querySpecificMessage: string = `INSERT INTO ${this.content.type} ${this.content.queryColumns} VALUES${this.content.queryValues}`;
-        const paramsSpecificMessage: any[] = [this.id, this.content.getParameters()];
+        await dbQuery('INSERT INTO message (senderId, recipientId, timestamp, contentType) VALUES (?, ?, ?, ?)', [this.sender, this.recipient, milliseconds,  ContentTypes[this.content.getType()]]);
+        await this.getIdBySender(this.sender);
+        const querySpecificMessage: string = `INSERT INTO ${ContentTypes[this.content.getType()]} ${this.content.getQueryColumns()} VALUES${this.content.getQueryValues()}`;
+        const paramsSpecificMessage: any[] = [this.id].concat(this.content.getParameters());
         await dbQuery(querySpecificMessage, paramsSpecificMessage);
     }
 
-    private async getIdFromDatabase(): Promise<void> {
-        const assignedId: any = await dbQuery('SELECT id FROM messages WHERE timestamp = ?', [this.timestamp]);
+    private async getIdBySender(senderId: number): Promise<void> {
+        const assignedId: any = await dbQuery('SELECT id FROM message WHERE timestamp = ? AND senderId = ?', [this.timestamp.getTime(), senderId]);
         this.setId(assignedId[0].id);
     }
 }
