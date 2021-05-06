@@ -15,7 +15,7 @@ export class HealthController implements AppRoute {
     /**
      * Checks if the app is running fine.
      */
-    public check(request: Request, response: Response) {
+    public check(request: Request, response: Response): void {
         try {
             const health: Health = new Health();
             if (health.isAlive()) {
@@ -23,7 +23,7 @@ export class HealthController implements AppRoute {
                     health: "ok"
                 }));
             } else {
-                throw new Error("There is a roblem in the system");
+                throw new Error("There is a problem in the system");
             }
         } catch (err) {
             response.status(500).json({
