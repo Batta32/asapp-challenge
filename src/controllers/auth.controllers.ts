@@ -26,13 +26,13 @@ export class AuthController implements AppRoute {
                 const correctPassword: boolean = await validatePassword(request.body.password, user.password);
                 if (!correctPassword) response.status(400).json('Invalid password');
                 const token: string = getToken(user.id);
-                response.status(200).send(response.header('Authorization', token).json({
+                response.status(200).header('Authorization', token).send({
                     id: user.id,
                     token: token
-                }));
+                });
             }
         } catch (err) {
-            response.status(500).json({
+            response.status(500).send({
                 err: err.message
             });
         }

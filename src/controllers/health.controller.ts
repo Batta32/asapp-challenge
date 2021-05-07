@@ -15,16 +15,16 @@ export class HealthController implements AppRoute {
      * Checks if the app is running fine.
      */
     public check(request: Request, response: Response): void {
-        try {            
+        try {
             if (Health.isAlive()) {
-                response.status(200).send(response.json({
+                response.status(200).send({
                     health: 'ok'
-                }));
+                });
             } else {
                 throw new Error('There is a problem in the system');
             }
         } catch (err) {
-            response.status(500).json({
+            response.status(500).send({
                 err: err.message
             });
         }

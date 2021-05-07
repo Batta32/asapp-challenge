@@ -20,11 +20,11 @@ export class UserController implements AppRoute {
             const user: User = new User(request.body.username, request.body.password);
             user.password = await encryptPassword(user.password);
             await user.create();
-            response.status(200).send(response.json({
+            response.status(200).send({
                 id: user.id
-            }));
+            });
         } catch(err) {
-            response.status(500).json({
+            response.status(500).send({
                 err: err.message
             });
         }

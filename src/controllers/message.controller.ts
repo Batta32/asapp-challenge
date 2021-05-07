@@ -45,12 +45,12 @@ export class MessageController implements AppRoute {
             }
             const message: Message = new Message(senderId, recipientId, content);
             await message.send();
-            response.status(200).send(response.json({
+            response.status(200).send({
                 id: message.id,
                 timestamp: message.timestamp
-            }));
+            });
         } catch (err) {
-            response.status(500).json({
+            response.status(500).send({
                 err: err.message
             });
         }
@@ -67,9 +67,9 @@ export class MessageController implements AppRoute {
             const user: User = new User('', '');
             user.id = recipientId;
             const messages: Message[] = await user.getMessages(startId, limit);
-            response.status(200).send(response.json(messages));
+            response.status(200).send(messages);
         } catch (err) {
-            response.status(500).json({
+            response.status(500).send({
                 err: err.message
             });
         }
