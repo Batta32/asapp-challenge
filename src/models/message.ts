@@ -1,5 +1,5 @@
 import { dbQuery } from '../services/db';
-import { Content, ContentTypes } from './content/content';
+import { Content } from './content/content';
 
 export class Message {
     public id = -1;
@@ -18,9 +18,9 @@ export class Message {
         this.timestamp = new Date();
         const milliseconds: number = this.timestamp.getTime();
         //TODO: Promise.all?
-        await dbQuery('INSERT INTO message (senderId, recipientId, timestamp, contentType) VALUES (?, ?, ?, ?)', [this.sender, this.recipient, milliseconds,  ContentTypes[this.content.getType()]]);
+        await dbQuery('INSERT INTO message (senderId, recipientId, timestamp, contentType) VALUES (?, ?, ?, ?)', [this.sender, this.recipient, milliseconds, this.content.type]);
         await this.getIdBySender(this.sender);
-        const querySpecificMessage = `INSERT INTO ${ ContentTypes[this.content.getType()] } ${ this.content.getQueryColumns() } VALUES${ this.content.getQueryValues() }`;
+        const querySpecificMessage = `INSERT INTO ${ this.content.type } ${ this.content.getQueryColumns() } VALUES${ this.content.getQueryValues() }`;
         const paramsSpecificMessage: any[] = [this.id].concat(this.content.getParameters());
         await dbQuery(querySpecificMessage, paramsSpecificMessage);
     }

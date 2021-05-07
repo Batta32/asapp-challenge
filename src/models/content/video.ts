@@ -1,6 +1,7 @@
 import { ContentTypes, Content } from './content';
 
 export class Video extends Content {
+    public type: string = ContentTypes[ContentTypes.VIDEO];
     public url: string;
     public source: VideoTypes;
     
@@ -8,10 +9,6 @@ export class Video extends Content {
         super();
         this.url = url;
         this.source = source;
-    }
-
-    public getType(): ContentTypes {
-        return ContentTypes.VIDEO;
     }
 
     public getQueryColumns(): string {

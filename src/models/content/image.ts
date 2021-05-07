@@ -1,6 +1,7 @@
 import { ContentTypes, Content } from './content';
 
 export class Image extends Content {
+    public type: string = ContentTypes[ContentTypes.IMAGE];
     public url: string;
     public height: number;
     public width: number;
@@ -10,10 +11,6 @@ export class Image extends Content {
         this.url = url;
         this.height = height;
         this.width = width;
-    }
-
-    public getType(): ContentTypes {
-        return ContentTypes.IMAGE;
     }
 
     public getQueryColumns(): string {

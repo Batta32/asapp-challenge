@@ -1,15 +1,12 @@
 import { ContentTypes, Content } from './content';
 
 export class Text extends Content {
+    public type: string = ContentTypes[ContentTypes.TEXT];
     public text: string;
 
     constructor(text: string) {
         super();
         this.text = text;
-    }
-
-    public getType(): ContentTypes {
-        return ContentTypes.TEXT;
     }
 
     public getQueryColumns(): string {
