@@ -17,7 +17,7 @@ All endpoints are configured in [src/controllers](https://github.com/Batta32/asa
 ## To try this sample
 > The sample uses the port 8080 by default.
 
-### Using Command file
+### Using Docker
 1. Open a terminal
 1. Go to the location of the cloned project
 1. Pull [Docker image for ASAPP challange](https://hub.docker.com/r/batta32/asapp-challenge)
