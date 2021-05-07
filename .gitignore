@@ -9,3 +9,6 @@ lib/
 
 # Env file
 .env
+
+# Database
+*.sqlite
