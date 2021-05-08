@@ -44,26 +44,25 @@ export class User {
         return user;
     }
 
-    private async getContentByRow(row: any): Promise<Content | undefined> {
-        let content: Content | undefined = undefined;
-        switch (row.contentType.toLowerCase()) {
-            case 'text': {
-                content = new Text('');
-                content = await content.getContent(row.id);
-                break;
-            }
-            case 'image': {
-                content = new Image('', -1, -1);
-                content = await content.getContent(row.id);
-                break;
-            }
-            case 'video': {
-                content = new Video('', VideoTypes.NULL);
-                content = await content.getContent(row.id);
-                break;
-            }
-        }
-
+    private async getContentByRow(row: any): Promise<Content> {
+        const type: string = row.contentType;
+        const callbacks: {(data: any): Promise<Content>}[] = [callbackText, callbackImage, callbackVideo];
+        const content: Content = await Content.getContent(type, callbacks, row);
         return content;
     }
+}
+
+async function callbackText(data: any): Promise<Content> {
+    const content: Content = new Text('');
+    return await content.getContentById(data.id);
+}
+
+async function callbackImage(data: any): Promise<Content> {
+    const content: Content = new Image('', -1, -1);
+    return await content.getContentById(data.id);
+}
+
+async function callbackVideo(data: any): Promise<Content> {
+    const content: Content = new Video('', VideoTypes.INVALID);
+    return await content.getContentById(data.id);
 }
