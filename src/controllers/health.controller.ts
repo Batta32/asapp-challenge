@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { AppRoute } from '../models/app-route';
 import { Health } from '../models/health';
+import { sendResponse, Status } from '../models/helpers/responses';
 
 export class HealthController implements AppRoute {
     public route = '/check';
@@ -16,17 +17,11 @@ export class HealthController implements AppRoute {
      */
     public check(request: Request, response: Response): void {
         try {
-            if (Health.isAlive()) {
-                response.status(200).send({
-                    health: 'ok'
-                });
-            } else {
-                throw new Error('There is a problem in the system');
-            }
+            if (new Health().isAlive()) sendResponse(response, Status.OK, { health: 'ok' });
+            else throw new Error('There is a problem in the system');
         } catch (err) {
-            response.status(500).send({
-                err: err.message
-            });
+            sendResponse(response, Status.SERVER_ERROR, { err: err.message });
         }
     }
 }
+

@@ -5,6 +5,7 @@ import { Image, Text, Video } from '../models/content';
 import { Content } from '../models/content/content';
 import { User } from '../models/user';
 import { TokenValidation } from '../models/authentication/token';
+import { sendResponse, Status } from '../models/helpers/responses';
 
 export class MessageController implements AppRoute {
     public route = '/messages';
@@ -25,34 +26,13 @@ export class MessageController implements AppRoute {
             const senderId: number = request.body.sender;
             const recipientId: number = request.body.recipient;
             const type: string = request.body.content.type;
-            let content: Content;
-            switch (type.toLowerCase()) {
-                case 'text': {
-                    content = new Text(request.body.content.text);
-                    break;
-                }
-                case 'image': {
-                    content = new Image(request.body.content.url, request.body.content.height, request.body.content.width);
-                    break;
-                }
-                case 'video': {
-                    content = new Video(request.body.content.url, request.body.content.source);
-                    break;
-                }
-                default: {
-                    throw new Error('Non-supported type');
-                }
-            }
+            const callbacks: { (data: any): Promise<Content> }[] = [callbackText, callbackImage, callbackVideo];
+            const content: Content = await Content.getContent(type, callbacks, request);
             const message: Message = new Message(senderId, recipientId, content);
             await message.send();
-            response.status(200).send({
-                id: message.id,
-                timestamp: message.timestamp
-            });
+            sendResponse(response, Status.OK, { id: message.id, timestamp: message.timestamp });
         } catch (err) {
-            response.status(500).send({
-                err: err.message
-            });
+            sendResponse(response, Status.SERVER_ERROR, { err: err.message });
         }
     }
 
@@ -66,12 +46,22 @@ export class MessageController implements AppRoute {
             const limit: number = request.body.limit;
             const user: User = new User('', '');
             user.id = recipientId;
-            const messages: Message[] = await user.getMessages(startId, limit);
-            response.status(200).send(messages);
+            const messages: Message[] = await user.getReceivedMessages(startId, limit);
+            sendResponse(response, Status.OK, { 'messages': messages });
         } catch (err) {
-            response.status(500).send({
-                err: err.message
-            });
+            sendResponse(response, Status.SERVER_ERROR, { err: err.message });
         }
     }
+}
+
+async function callbackText(data: any): Promise<Content> {
+    return new Text(data.body.content.text);
+}
+
+async function callbackImage(data: any): Promise<Content> {
+    return new Image(data.body.content.url, data.body.content.height, data.body.content.width);
+}
+
+async function callbackVideo(data: any): Promise<Content> {
+    return new Video(data.body.content.url, data.body.content.source);
 }
