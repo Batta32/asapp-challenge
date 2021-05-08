@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { sendResponse, Status } from '../helpers/responses';
 
 interface IPayload {
     id: string;
@@ -8,12 +9,22 @@ interface IPayload {
 }
 
 // Middleware
-export const TokenValidation = (request: Request, response: Response, next: NextFunction): any => {
-    const token = request.header('Authorization');
-    if (!token) return response.status(401).json('Access denied');
+export const tokenValidation = (request: Request, response: Response, next: NextFunction): any => {
+    try {
+        const token = request.header('Authorization');
+        if (!token) return sendResponse(response, Status.UNAUTHORIZED, 'Access denied');
+        const payload: IPayload = jwt.verify(token, process.env.TOKEN_SECRET || 'DEFAULT_TOKEN_SECRET') as IPayload;
+        request.userId = payload.id;
+        next();
+    } catch (err) {
+        return sendResponse(response, Status.UNAUTHORIZED, 'Access denied');
+    }
+};
 
-    const payload: IPayload = jwt.verify(token, process.env.TOKEN_SECRET || 'DEFAULT_TOKEN_SECRET') as IPayload;
-    request.userId = payload.id;
+export const validateLoggedUser = (request: Request, response: Response, next: NextFunction): any => {
+    if (request.body.recipient !== undefined && request.body.recipient !== request.userId) {
+        return sendResponse(response, Status.UNAUTHORIZED, 'Access denied');
+    }
     next();
 };
 
