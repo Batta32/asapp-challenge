@@ -14,18 +14,19 @@ export class User {
         this.password = password;
     }
 
-    public async create(): Promise<void> {
+    public async create(): Promise<User> {
         await dbQuery('INSERT INTO user (username, password) VALUES(?, ?)', [this.username, this.password]);
-        await this.getIdFromDatabase();
+        return await this.getUserByUsername();
     }
 
-    public async getMessages(startId: number, limit: number): Promise<Message[]> {
+    public async getReceivedMessages(startId: number, limit: number): Promise<Message[]> {
         const messages: Message[] = [];
-        const query = `SELECT * FROM message WHERE id >= ? AND recipientId = ? LIMIT ?`;
-        const params: any[] = [startId, this.id, limit];
-        const rows: any[] = await dbQuery(query, params) as any[];
-        for(const row of rows) {
-            const content: Content | undefined = await this.getContentByRow(row);
+        // TODO: The query should be a JOIN between MESSAGE VS (TEXT/IMAGE/VIDEO)
+        // in order to hit the database one time
+        // I'm leaving as is because it will require changes
+        const rows: any[] = await dbQuery(`SELECT * FROM message WHERE id >= ? AND recipientId = ? ORDER BY ID LIMIT ?`, [startId, this.id, limit]);
+        for (const row of rows) {
+            const content: Content = await this.getContentByRow(row);
             if (content !== undefined) {
                 const message: Message = new Message(row.senderId, this.id, content);
                 message.id = row.id;
@@ -36,9 +37,11 @@ export class User {
         return messages;
     }
 
-    private async getIdFromDatabase(): Promise<void> {
-        const user: any = await dbQuery('SELECT id FROM user WHERE username = ?', [this.username]);
-        this.id = user[0].id;
+    public async getUserByUsername(): Promise<User> {
+        const rows: any = await dbQuery('SELECT * FROM user WHERE username = ?', [this.username]);
+        const user: User = new User(rows[0].username, rows[0].password);
+        user.id = rows[0].id;
+        return user;
     }
 
     private async getContentByRow(row: any): Promise<Content | undefined> {
