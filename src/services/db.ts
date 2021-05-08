@@ -1,19 +1,12 @@
 import sqlite3 from 'sqlite3';
 import { join } from 'path';
+import { existsSync } from 'fs';
 
 const DATABASE_FILE = join(__dirname, '..', '..', 'database.sqlite');
-if(!DATABASE_FILE) {
-    throw new Error('DB Failed');
-}
 
 export const openConnection = (): sqlite3.Database => {
     const db: sqlite3.Database = new sqlite3.Database(DATABASE_FILE);
     return db;
-};
-
-export const checkState = (): boolean => {
-    const db: sqlite3.Database = openConnection();
-    return db != null;
 };
 
 export const dbQuery = (query: string, params?: any[]): any => {
@@ -29,4 +22,8 @@ export const dbQuery = (query: string, params?: any[]): any => {
         .finally(() => {
             db.close();
         });
+};
+
+export const checkState = (): boolean => {
+    return existsSync(DATABASE_FILE);
 };
