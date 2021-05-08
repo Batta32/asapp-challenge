@@ -1,11 +1,7 @@
 import { checkState } from '../services/db';
 
 export class Health {
-    public static isAlive(): boolean {
-        return Health.validateDatabase();
-    }
-
-    private static validateDatabase(): boolean {
+    public isAlive(): boolean {
         return checkState();
     }
 }
