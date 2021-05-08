@@ -23,13 +23,13 @@ export class Video extends Content {
         return [this.url, this.source];
     }
 
-    protected createContent(rows: any[]): Content {
+    protected create(rows: any[]): Content {
         return new Video(rows[0].url, rows[0].source);
     }
 }
 
 export enum VideoTypes {
-    YOUTUBE,
+    INVALID,
     VIMEO,
-    NULL
+    YOUTUBE
 }

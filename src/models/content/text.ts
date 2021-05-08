@@ -21,7 +21,7 @@ export class Text extends Content {
         return [this.text];
     }
 
-    protected createContent(rows: any[]): Content {
+    protected create(rows: any[]): Content {
         return new Text(rows[0].text);
     }
 }

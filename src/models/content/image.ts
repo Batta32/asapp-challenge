@@ -25,7 +25,7 @@ export class Image extends Content {
         return [this.url, this.height, this.width];
     }
 
-    protected createContent(rows: any[]): Content {
+    protected create(rows: any[]): Content {
         return new Image(rows[0].url, rows[0].height, rows[0].width);
     }
 }
