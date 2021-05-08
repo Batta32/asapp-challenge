@@ -31,8 +31,8 @@ export class Message {
     }
 
     public async getIdBySender(): Promise<void> {
-        const assignedId: any = await dbQuery('SELECT id FROM message WHERE timestamp = ? AND senderId = ?', [this.timestamp.getTime(), this.sender]);
-        this.id = assignedId[0].id;
+        const rows: any = await dbQuery('SELECT * FROM message WHERE timestamp = ? AND senderId = ?', [this.timestamp.getTime(), this.sender]);
+        this.id = rows[0].id;
     }
 }
 

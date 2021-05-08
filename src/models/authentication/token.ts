@@ -21,7 +21,7 @@ export const tokenValidation = (request: Request, response: Response, next: Next
     }
 };
 
-export const validateLoggedUser = (request: Request, response: Response, next: NextFunction): any => {
+export const validateConfigToGetMessages = (request: Request, response: Response, next: NextFunction): any => {
     if (request.body.recipient !== undefined && request.body.recipient !== request.userId) {
         return sendResponse(response, Status.UNAUTHORIZED, 'Access denied');
     }

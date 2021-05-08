@@ -4,7 +4,7 @@ import { Message } from '../models/message';
 import { Image, Text, Video } from '../models/content';
 import { Content } from '../models/content/content';
 import { User } from '../models/user';
-import { tokenValidation, validateLoggedUser } from '../models/authentication/token';
+import { tokenValidation, validateConfigToGetMessages } from '../models/authentication/token';
 import { sendResponse, Status } from '../models/helpers/responses';
 
 export class MessageController implements AppRoute {
@@ -14,7 +14,7 @@ export class MessageController implements AppRoute {
     // Constructor
     public constructor() {
         this.router.post('/', tokenValidation, this.send);
-        this.router.get('/', [tokenValidation, validateLoggedUser], this.get);
+        this.router.get('/', [tokenValidation, validateConfigToGetMessages], this.get);
     }
 
     /**
@@ -25,6 +25,13 @@ export class MessageController implements AppRoute {
         try {
             const senderId: number = request.body.sender;
             const recipientId: number = request.body.recipient;
+            try {
+                let recipient: User = new User('', '');
+                recipient.id = recipientId;
+                recipient = await recipient.getUserById();
+            } catch (error) {
+                throw new Error('The user to send the message does not exist');
+            }
             const type: string = request.body.content.type;
             let content: Content;
             switch (type.toLowerCase()) {

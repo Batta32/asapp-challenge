@@ -44,6 +44,12 @@ export class User {
         return user;
     }
 
+    public async getUserById(): Promise<User> {
+        const rows: any = await dbQuery('SELECT * FROM user WHERE id = ?', [this.id]);
+        const user: User = new User(rows[0].username, rows[0].password);        
+        return user;
+    }
+
     private async getContentByRow(row: any): Promise<Content> {
         const type: string = row.contentType;
         let content: Content;

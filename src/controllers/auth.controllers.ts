@@ -22,7 +22,7 @@ export class AuthController implements AppRoute {
     public async login(request: Request, response: Response): Promise<void> {
         try {
             const user: User | undefined = await new Login().login(request.body.username);
-            if (user === undefined) sendResponse(response, Status.NOT_FOUND, 'Email or password is wrong');
+            if (user === undefined) sendResponse(response, Status.NOT_FOUND, 'Username or password is wrong');
             else {
                 const correctPassword: boolean = await validatePassword(request.body.password, user.password);
                 if (!correctPassword) sendResponse(response, Status.BAD_REQUEST, 'Invalid password');
