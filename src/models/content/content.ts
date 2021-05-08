@@ -11,12 +11,12 @@ export abstract class Content {
     public abstract getParameters(): any[];
     public abstract getQueryColumns(): string;
     public abstract getQueryValues(): string;
-    protected abstract create(rows: any[]): Content;
+    public abstract createByRow(row: any): Content;
     public abstract type: string;
 
     public async getContentById(messageId: number): Promise<Content> {
         const rows: any[] = await dbQuery(`SELECT * FROM ${ this.type } WHERE messageId = ?`, [messageId]);
-        return this.create(rows);
+        return this.createByRow(rows[0]);
     }
 
     public static async getContent(type: string, callback: {(data: any): Promise<Content>}[], data: any): Promise<Content> {

@@ -23,8 +23,8 @@ export class Video extends Content {
         return [this.url, this.source];
     }
 
-    protected create(rows: any[]): Content {
-        return new Video(rows[0].url, rows[0].source);
+    public createByRow(row: any): Content {
+        return new Video(row.url, row.source);
     }
 }
 

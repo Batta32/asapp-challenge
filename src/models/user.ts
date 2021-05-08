@@ -46,23 +46,24 @@ export class User {
 
     private async getContentByRow(row: any): Promise<Content> {
         const type: string = row.contentType;
-        const callbacks: {(data: any): Promise<Content>}[] = [callbackText, callbackImage, callbackVideo];
-        const content: Content = await Content.getContent(type, callbacks, row);
-        return content;
+        let content: Content;
+        switch (type.toLowerCase()) {
+            case 'text': {
+                content = new Text('');
+                break;
+            }
+            case 'image': {
+                content = new Image('', -1, -1);
+                break;
+            }
+            case 'video': {
+                content = new Video('', VideoTypes.INVALID);
+                break;
+            }
+            default: {
+                throw new Error('Non-supported type');
+            }
+        }
+        return content.createByRow(row);
     }
-}
-
-async function callbackText(data: any): Promise<Content> {
-    const content: Content = new Text('');
-    return await content.getContentById(data.id);
-}
-
-async function callbackImage(data: any): Promise<Content> {
-    const content: Content = new Image('', -1, -1);
-    return await content.getContentById(data.id);
-}
-
-async function callbackVideo(data: any): Promise<Content> {
-    const content: Content = new Video('', VideoTypes.INVALID);
-    return await content.getContentById(data.id);
 }

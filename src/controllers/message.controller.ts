@@ -26,8 +26,24 @@ export class MessageController implements AppRoute {
             const senderId: number = request.body.sender;
             const recipientId: number = request.body.recipient;
             const type: string = request.body.content.type;
-            const callbacks: { (data: any): Promise<Content> }[] = [callbackText, callbackImage, callbackVideo];
-            const content: Content = await Content.getContent(type, callbacks, request);
+            let content: Content;
+            switch (type.toLowerCase()) {
+                case 'text': {
+                    content = new Text(request.body.content.text);
+                    break;
+                }
+                case 'image': {
+                    content = new Image(request.body.content.url, request.body.content.height, request.body.content.width);
+                    break;
+                }
+                case 'video': {
+                    content = new Video(request.body.content.url, request.body.content.source);
+                    break;
+                }
+                default: {
+                    throw new Error('Non-supported type');
+                }
+            }            
             const message: Message = new Message(senderId, recipientId, content);
             await message.send();
             sendResponse(response, Status.OK, { id: message.id, timestamp: message.timestamp });
@@ -52,16 +68,4 @@ export class MessageController implements AppRoute {
             sendResponse(response, Status.SERVER_ERROR, { err: err.message });
         }
     }
-}
-
-async function callbackText(data: any): Promise<Content> {
-    return new Text(data.body.content.text);
-}
-
-async function callbackImage(data: any): Promise<Content> {
-    return new Image(data.body.content.url, data.body.content.height, data.body.content.width);
-}
-
-async function callbackVideo(data: any): Promise<Content> {
-    return new Video(data.body.content.url, data.body.content.source);
 }
