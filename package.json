@@ -11,7 +11,7 @@
     "lint-fix": "eslint --fix ./src/**/*.ts",
     "prebuild": "npm run lint",
     "start": "npm run build && node ./lib/index.js",
-    "test": "npm run test"
+    "test": "mocha"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -32,6 +32,8 @@
     "copyfiles": "^2.1.0",
     "eslint": "^7.25.0",
     "eslint-plugin-only-warn": "^1.0.2",
+    "mocha": "^8.4.0",
+    "sinon": "^10.0.0",
     "typescript": "^3.2.2",
     "rimraf": "^2.6.2"
   },
