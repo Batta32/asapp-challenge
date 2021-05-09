@@ -5,13 +5,22 @@ import { Content, Image, Text, Video } from '../models/content';
 import { sendResponse, Status } from '../models/helpers';
 import { tokenValidation, validateConfigToGetMessages, validateConfigToSendMessages } from '../models/middlewares';
 
+/**
+ * Controller to handle the actions of the messages
+ */
 export class MessageController implements AppRoute {
+
+    // Main endpoint
     public route = '/messages';
     public router: Router = Router();
 
     // Constructor
     public constructor() {
+        // POST: route endpoint to send messages to a user
+        // Contains middleware to validate the token and the necessary conditions to send messages
         this.router.post('/', [tokenValidation, validateConfigToSendMessages], this.send);
+        // GET: route endpoint to get the message of a user
+        // Contains middlewares to validate the token and the necessary conditions to get messages
         this.router.get('/', [tokenValidation, validateConfigToGetMessages], this.get);
     }
 
@@ -21,9 +30,12 @@ export class MessageController implements AppRoute {
      */
     public async send(request: Request, response: Response): Promise<void> {
         try {
+            // Get the properties from the request
             const senderId: number = request.body.sender;
             const recipientId: number = request.body.recipient;
             const type: string = request.body.content.type;
+
+            // Initialize specific content by request
             let content: Content;
             switch (type.toLowerCase()) {
                 case 'text': {
@@ -43,9 +55,12 @@ export class MessageController implements AppRoute {
                 }
             }            
             const message: Message = new Message(senderId, recipientId, content);
+            // Send message
             await message.send();
+            // Send response
             sendResponse(response, Status.OK, { id: message.id, timestamp: message.timestamp });
         } catch (err) {
+            // Send caught error
             sendResponse(response, Status.SERVER_ERROR, { err: err.message });
         }
     }
@@ -55,14 +70,18 @@ export class MessageController implements AppRoute {
      */
     public async get(request: Request, response: Response): Promise<void> {
         try {
+            // Get the properties from the request
             const recipientId: number = request.body.recipient;
             const startId: number = request.body.start;
             const limit: number = request.body.limit;
             const user: User = new User('', '');
             user.id = recipientId;
+            // Get the messages of a user starting from an id and limiting the amount of messages
             const messages: Message[] = await user.getReceivedMessages(startId, limit);
+            // Send response
             sendResponse(response, Status.OK, { 'messages': messages });
         } catch (err) {
+            // Send caught error
             sendResponse(response, Status.SERVER_ERROR, { err: err.message });
         }
     }

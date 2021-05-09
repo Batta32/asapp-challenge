@@ -1,5 +1,8 @@
 import { Response } from 'express';
 
+/**
+ * HTTP status
+ */
 export const Status = {
     OK: 200,
     BAD_REQUEST: 400,
@@ -12,6 +15,7 @@ export const Status = {
     CREATED: 201,
 };
 
+// Send server's response
 export const sendResponse = (response: Response, status: number, content: any): void => {
     response.status(status).send(content);    
 };
