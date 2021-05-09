@@ -1,4 +1,4 @@
-import { ContentTypes, Content } from './content';
+import { ContentTypes, Content } from './';
 
 export class Video extends Content {
     public type: string = ContentTypes[ContentTypes.VIDEO];

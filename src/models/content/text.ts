@@ -1,4 +1,4 @@
-import { ContentTypes, Content } from './content';
+import { ContentTypes, Content } from './';
 
 export class Text extends Content {
     public type: string = ContentTypes[ContentTypes.TEXT];

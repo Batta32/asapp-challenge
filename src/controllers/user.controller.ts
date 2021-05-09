@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { AppRoute } from '../models/app-route';
-import { sendResponse, Status } from '../models/helpers/responses';
-import { encryptPassword } from '../models/security';
-import { User } from '../models/user';
+import { AppRoute } from '../server';
+import { sendResponse, Status } from '../models/helpers';
+import { User, encryptPassword } from '../models';
 
 export class UserController implements AppRoute {
     public route = '/users';

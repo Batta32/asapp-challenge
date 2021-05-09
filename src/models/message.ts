@@ -1,5 +1,5 @@
-import { dbQuery } from '../services/db';
-import { Content } from './content/content';
+import { dbQuery } from '../services';
+import { Content } from './content';
 
 export class Message {
     public id = -1;

@@ -1,10 +1,8 @@
 import { Router, Request, Response } from 'express';
-import { AppRoute } from '../models/app-route';
-import { User } from '../models/user';
-import { Login } from '../models/login';
-import { getToken } from '../models/authentication/token';
-import { validatePassword } from '../models/security';
-import { sendResponse, Status } from '../models/helpers/responses';
+import { AppRoute } from '../server';
+import { User, Login, validatePassword } from '../models';
+import { getToken } from '../models/middlewares';
+import { sendResponse, Status } from '../models/helpers';
 
 export class AuthController implements AppRoute {
     public route = '/login';

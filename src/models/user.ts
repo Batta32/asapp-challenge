@@ -1,7 +1,6 @@
-import { dbQuery } from '../services/db';
-import { Image, Text, Video, VideoTypes } from './content';
-import { Content } from './content/content';
-import { Message } from './message';
+import { dbQuery } from '../services';
+import { Content, Image, Text, Video, VideoTypes } from './content';
+import { Message } from './';
 
 export class User {
     public id = -1;

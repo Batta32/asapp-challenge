@@ -1,9 +1,6 @@
 import { Router } from 'express';
-import { AuthController } from '../controllers/auth.controllers';
-import { HealthController } from '../controllers/health.controller';
-import { MessageController } from '../controllers/message.controller';
-import { UserController } from '../controllers/user.controller';
-import { AppRoute } from '../models/app-route';
+import { AuthController, HealthController, MessageController, UserController } from '../controllers';
+import { AppRoute } from './';
 
 export class AppRouting {
     private route: Router;

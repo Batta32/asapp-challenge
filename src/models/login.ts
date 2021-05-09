@@ -1,4 +1,4 @@
-import { User } from './user';
+import { User } from './';
 
 export class Login {
     public async login(username: string): Promise<User | undefined> {

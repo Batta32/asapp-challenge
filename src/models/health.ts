@@ -1,4 +1,4 @@
-import { checkState } from '../services/db';
+import { checkState } from '../services';
 
 export class Health {
     public isAlive(): boolean {

@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { json, urlencoded } from 'body-parser';
-import { AppRouting } from './server/app.routing';
+import { AppRouting } from './server';
 import * as dotenv from 'dotenv';
 
 dotenv.config();

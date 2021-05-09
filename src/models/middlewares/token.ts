@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { sendResponse, Status } from '../helpers/responses';
+import { sendResponse, Status } from '../helpers';
 
 interface IPayload {
     id: string;
@@ -19,13 +19,6 @@ export const tokenValidation = (request: Request, response: Response, next: Next
     } catch (err) {
         return sendResponse(response, Status.UNAUTHORIZED, 'Access denied');
     }
-};
-
-export const validateConfigToGetMessages = (request: Request, response: Response, next: NextFunction): any => {
-    if (request.body.recipient !== undefined && request.body.recipient !== request.userId) {
-        return sendResponse(response, Status.UNAUTHORIZED, 'Access denied');
-    }
-    next();
 };
 
 export const getToken = (userId: number): string => {

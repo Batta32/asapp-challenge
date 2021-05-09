@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { AppRoute } from '../models/app-route';
-import { Health } from '../models/health';
-import { sendResponse, Status } from '../models/helpers/responses';
+import { AppRoute } from '../server';
+import { Health } from '../models';
+import { sendResponse, Status } from '../models/helpers';
 
 export class HealthController implements AppRoute {
     public route = '/check';

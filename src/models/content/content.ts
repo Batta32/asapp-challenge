@@ -1,4 +1,4 @@
-import { dbQuery } from '../../services/db';
+import { dbQuery } from '../../services';
 
 export enum ContentTypes {
     TEXT,
