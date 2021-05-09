@@ -20,18 +20,15 @@ export class User {
     // Creates user into database
     public async create(): Promise<User> {
         // Insert user
-        await dbQuery('INSERT INTO user (username, password) VALUES(?, ?)', [this.username, this.password]);
+        await this.insert();
         return await this.getUserByUsername();
     }
 
     // Gets user's messages
     public async getReceivedMessages(startId: number, limit: number): Promise<Message[]> {
         const messages: Message[] = [];
-        // TODO: The query should be a JOIN between MESSAGE VS (TEXT/IMAGE/VIDEO)
-        // in order to hit the database one time
-        // I'm leaving as is because it will require changes
         // Get messages filtering by messageId and recipient and limitting the number of messages
-        const rows: any[] = await dbQuery(`SELECT * FROM message WHERE id >= ? AND recipientId = ? ORDER BY ID LIMIT ?`, [startId, this.id, limit]);
+        const rows: any[] = await this.getMessages(startId, limit);
         for (const row of rows) {
             // Create a content depending message
             const content: Content = await this.getContentByRow(row);
@@ -60,6 +57,15 @@ export class User {
         return user;
     }
 
+    // Get messages filtering by messageId and recipient and limitting the number of messages
+    private async getMessages(startId: number, limit: number): Promise<any[]> {
+        // TODO: The query should be a JOIN between MESSAGE VS (TEXT/IMAGE/VIDEO)
+        // in order to hit the database one time
+        // I'm leaving as is because it will require changes
+        // Get messages filtering by messageId and recipient and limitting the number of messages
+        return await dbQuery(`SELECT * FROM message WHERE id >= ? AND recipientId = ? ORDER BY ID LIMIT ?`, [startId, this.id, limit]);
+    }
+
     // Initialize content by row
     private async getContentByRow(row: any): Promise<Content> {
         const type: string = row.contentType;
@@ -82,5 +88,13 @@ export class User {
             }
         }
         return content.createByRow(row);
+    }
+
+    private async insert(): Promise<void> {
+        try {
+            await dbQuery('INSERT INTO user (username, password) VALUES(?, ?)', [this.username, this.password]);
+        } catch (err) {
+            throw new Error('The user already exists');
+        }
     }
 }
