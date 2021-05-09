@@ -6,6 +6,7 @@ import { existsSync } from 'fs';
 const DATABASE_FILE = join(__dirname, '..', '..', 'database.sqlite');
 
 // Open connection to database
+// https://github.com/mapbox/node-sqlite3/blob/master/README.md#usage
 export const openConnection = (): sqlite3.Database => {
     const db: sqlite3.Database = new sqlite3.Database(DATABASE_FILE);
     return db;
