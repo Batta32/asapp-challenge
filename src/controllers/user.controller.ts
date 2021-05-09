@@ -32,7 +32,7 @@ export class UserController implements AppRoute {
             sendResponse(response, Status.OK, { id: user.id });
         } catch (err) {
             // Send caught error
-            sendResponse(response, Status.SERVER_ERROR, { err: err.message });
+            sendResponse(response, Status.SERVER_ERROR, err.message);
         }
     }
 }

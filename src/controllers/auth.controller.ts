@@ -40,7 +40,7 @@ export class AuthController implements AppRoute {
             }
         } catch (err) {
             // Send caught error
-            sendResponse(response, Status.SERVER_ERROR, { err: err.message });
+            sendResponse(response, Status.SERVER_ERROR, err.message);
         }
     }
 }

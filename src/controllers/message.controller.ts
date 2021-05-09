@@ -61,7 +61,7 @@ export class MessageController implements AppRoute {
             sendResponse(response, Status.OK, { id: message.id, timestamp: message.timestamp });
         } catch (err) {
             // Send caught error
-            sendResponse(response, Status.SERVER_ERROR, { err: err.message });
+            sendResponse(response, Status.SERVER_ERROR, err.message);
         }
     }
 
@@ -82,7 +82,7 @@ export class MessageController implements AppRoute {
             sendResponse(response, Status.OK, { 'messages': messages });
         } catch (err) {
             // Send caught error
-            sendResponse(response, Status.SERVER_ERROR, { err: err.message });
+            sendResponse(response, Status.SERVER_ERROR, err.message);
         }
     }
 }

@@ -28,7 +28,7 @@ export class HealthController implements AppRoute {
             else throw new Error('There is a problem in the system');
         } catch (err) {
             // Send caught error
-            sendResponse(response, Status.SERVER_ERROR, { err: err.message });
+            sendResponse(response, Status.SERVER_ERROR, err.message);
         }
     }
 }
