@@ -1,6 +1,7 @@
-import { dbQuery } from '../services';
+import { dbInsert, dbQuery } from '../services';
 import { Content, Image, Text, Video, VideoTypes } from './content';
 import { Message } from './';
+import { encryptPassword } from './security';
 
 /**
  * User class
@@ -19,9 +20,13 @@ export class User {
 
     // Creates user into database
     public async create(): Promise<User> {
+        // Encrypt received password   
+        this.password = await encryptPassword(this.password);
         // Insert user
-        await this.insert();
-        return await this.getUserByUsername();
+        await this.insert().then((id) => {
+            this.id = id;
+        });
+        return this;
     }
 
     // Gets user's messages
@@ -90,9 +95,9 @@ export class User {
         return content.createByRow(row);
     }
 
-    private async insert(): Promise<void> {
+    private async insert(): Promise<any> {
         try {
-            await dbQuery('INSERT INTO user (username, password) VALUES(?, ?)', [this.username, this.password]);
+            return await dbInsert('INSERT INTO user (username, password) VALUES(?, ?)', [this.username, this.password]);
         } catch (err) {
             throw new Error('The user already exists');
         }

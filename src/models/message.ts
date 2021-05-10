@@ -1,4 +1,4 @@
-import { dbQuery } from '../services';
+import { dbInsert, dbQuery } from '../services';
 import { Content } from './content';
 
 /**
@@ -25,26 +25,20 @@ export class Message {
         // Await to insert a message and content into database
         await Promise.all([
             // Insert message
-            await this.insertMessage(),
-            // After inserting the message, we search the assigned message id
-            await this.getIdBySender(),
+            await this.insertMessage().then((id) => {
+                this.id = id;
+            }),
             // Insert content
             await this.insertContent()
         ]);
     }
 
     // Insert message
-    private async insertMessage(): Promise<void> {
-        await dbQuery(
+    private async insertMessage(): Promise<any> {
+        return await dbInsert(
             'INSERT INTO message (senderId, recipientId, timestamp, contentType) VALUES (?, ?, ?, ?)',
             [this.sender, this.recipient, this.timestamp.getTime(), this.content.type]
         );
-    }
-
-    // Get message by sender
-    private async getIdBySender(): Promise<void> {
-        const rows: any = await dbQuery('SELECT * FROM message WHERE timestamp = ? AND senderId = ?', [this.timestamp.getTime(), this.sender]);
-        this.id = rows[0].id;
     }
 
     // Insert content

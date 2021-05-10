@@ -6,7 +6,6 @@ import { existsSync } from 'fs';
 const DATABASE_FILE = join(__dirname, '..', '..', 'database.sqlite');
 
 // Open connection to database
-// https://github.com/mapbox/node-sqlite3/blob/master/README.md#usage
 export const openConnection = (): sqlite3.Database => {
     const db: sqlite3.Database = new sqlite3.Database(DATABASE_FILE);
     return db;
@@ -22,10 +21,26 @@ export const dbQuery = (query: string, params?: any[]): any => {
             else
                 resolve(rows);
         });
-    })
-        .finally(() => {
-            db.close();
+    }).finally(() => {
+        db.close();
+    });
+};
+
+export const dbInsert = (query: string, params?: any[]): any => {
+    const db: sqlite3.Database = openConnection();
+    return new Promise((resolve, reject) => {
+        db.run(query, params, function(err) {
+            if (err) {
+                console.log('Error running sql ' + query);
+                console.log(err);
+                reject(err);
+            } else {
+                resolve(this.lastID);
+            }
         });
+    }).finally(() => {
+        db.close();
+    });
 };
 
 // Check state of database

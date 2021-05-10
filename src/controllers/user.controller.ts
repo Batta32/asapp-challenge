@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { AppRoute } from '../server';
 import { sendResponse, Status } from '../models/helpers';
-import { User, encryptPassword } from '../models';
+import { User } from '../models';
 
 /**
  * Controller to handle the creation of a user
@@ -23,9 +23,7 @@ export class UserController implements AppRoute {
      */
     public async createUser(request: Request, response: Response): Promise<void> {
         try {         
-            // Encrypt received password   
-            const encryptedPassword: string = await encryptPassword(request.body.password);
-            let user: User = new User(request.body.username, encryptedPassword);
+            let user: User = new User(request.body.username, request.body.password);
             // Create new user
             user = await user.create();
             // Send response

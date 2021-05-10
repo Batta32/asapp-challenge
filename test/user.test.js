@@ -13,19 +13,12 @@ describe('The user', function () {
             expectedUser = new User('MockedUsername', 'MockedPassword');
             expectedUser.id = 1;
             sandbox.replace(expectedUser, 'insert', () => {
-                return Promise.resolve('Mocked function successfully');
-            });
-            sandbox.replace(expectedUser, 'getUserByUsername', async () => {
-                encryptedPassword = await encryptPassword(expectedUser.password);
-                user = new User(expectedUser.username, encryptedPassword);
-                user.id = 1;
-                return Promise.resolve(user);
+                return Promise.resolve(1);
             });
             actualUser = await expectedUser.create();
             strictEqual(expectedUser.id, actualUser.id);
             strictEqual(expectedUser.username, actualUser.username);
-            samePassword = await validatePassword(expectedUser.password, actualUser.password);
-            strictEqual(samePassword, true);
+            strictEqual(expectedUser.password, actualUser.password);
         });
 
         it('when the user can received the messages that were sent to him', async function () {

@@ -14,10 +14,7 @@ describe('The message', function () {
             expectedMessage = new Message(1, 2, text);
             expectedMillis = new Date('0001-01-01T00:00:00Z').getTime();
             sandbox.replace(expectedMessage, 'insertMessage', () => {
-                return Promise.resolve('Mocked function successfully');
-            });
-            sandbox.replace(expectedMessage, 'getIdBySender', () => {
-                expectedMessage.id = 1;
+                return Promise.resolve(1);
             });
             sandbox.replace(expectedMessage, 'insertContent', () => {
                 return Promise.resolve('Mocked function successfully');
