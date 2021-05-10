@@ -19,7 +19,7 @@ All endpoints are configured in [src/controllers](https://github.com/Batta32/asa
 
 ### Using Docker
 1. Open a terminal
-1. Pull [Docker image for ASAPP challange](https://hub.docker.com/r/batta32/asapp-challenge)
+1. Pull [Docker image for ASAPP challenge](https://hub.docker.com/r/batta32/asapp-challenge)
     ```bash
     docker pull batta32/asapp-challenge
     ```
