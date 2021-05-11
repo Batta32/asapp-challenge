@@ -6,3 +6,9 @@ lib/
 
 # User config of Visual Studio Code
 .vscode
+
+# Env file
+.env
+
+# Database
+*.sqlite
