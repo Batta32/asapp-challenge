@@ -24,7 +24,7 @@ export const tokenValidation = (request: Request, response: Response, next: Next
 // Generate JWT
 export const getToken = (userId: number): string => {
     return jwt.sign({ id: userId }, process.env.TOKEN_SECRET || 'DEFAULT_TOKEN_SECRET', {
-        // 1 hour
+        // 1 hour (currently it's 24 hours)
         expiresIn: 60 * 60 * 24
     });
 };

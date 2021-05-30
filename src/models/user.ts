@@ -92,6 +92,8 @@ export class User {
                 throw new Error('Non-supported type');
             }
         }
+        // TODO: This is wrong, this should be content.getContentById instead of content.createByRow
+        // as this should return the information of each content
         return content.createByRow(row);
     }
 

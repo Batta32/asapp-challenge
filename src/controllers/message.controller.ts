@@ -73,6 +73,7 @@ export class MessageController implements AppRoute {
             // Get the properties from the request
             const recipientId: number = request.body.recipient;
             const startId: number = request.body.start;
+            // TODO: if this is not received it should be 100
             const limit: number = request.body.limit;
             const user: User = new User('', '');
             user.id = recipientId;

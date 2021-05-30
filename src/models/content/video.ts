@@ -22,6 +22,7 @@ export class Video extends Content {
     constructor(url: string, source: VideoTypes) {
         super();
         this.url = url;
+        // TODO: this is not supporting the enum only, it's receives all the strings no matter if it's a videotypes or not    
         this.source = source;
     }
 
